@@ -25,18 +25,14 @@ Logging of latency and accuracy	FR7	Medium
 Locating another object of the same class	FR6	Low
 How it works
 Passthrough camera
-        |
-        v
-YOLO object detection  -->  2D boxes mapped to 3D positions
-        |
-        v
-Head direction  -->  object in focus
-        |
-        v
-Speech-to-text  -->  LLM (question + object context)  -->  Text-to-speech
-        |
-        v
-Answer panel and highlight in mixed reality
+YOLO object detection
+Map 2D boxes to 3Dpositions
+Select object in focus fromhead direction
+User's spoken question
+Speech-to-text
+LLM: question and objectcontext
+Answer panel and highlight
+Text-to-speech
 Technology
 Component	Tool
 Headset	Meta Quest
@@ -80,7 +76,10 @@ Keys for external services are kept in a local file that is listed in .gitignore
 
 Team
 Name	Role
-Soully Traore	To be assigned
+Soully 	To be assigned
+Clinton	To be assigned
+Isik	To be assigned
+Vedat 	To be assigned
 Clinton	To be assigned
 Isik	To be assigned
 Vedat Yildirim	To be assigned
