@@ -1,6 +1,6 @@
 # What Am I Looking At?
 
-A gaze-aware mixed reality assistant for Meta Quest. The user looks at a real-world object, asks a spoken question such as "What is that?" or "How does it work?", and receives an answer about that object without having to name it.
+A gaze-aware virtual reality assistant for Meta Quest. The user looks at an object in a virtual environment, asks a spoken question such as "What is that?" or "How does it work?", and receives an answer about that object without having to name it.
 
 Group project for COMP6038 Advanced Interfaces, Oxford Brookes University, Semester 1, 2026-27.
 
@@ -8,17 +8,19 @@ Group project for COMP6038 Advanced Interfaces, Oxford Brookes University, Semes
 
 ## Overview
 
-Finding information about an unfamiliar object usually means stopping the task, describing the object in words and searching manually. This project removes that step by combining three things:
+In a virtual environment, users can see objects but often have no quick way to find out what they are or how they work. This project addresses that by combining three things:
 
-1. **Object detection.** A YOLO model detects real-world objects through the headset's passthrough camera.
+1. **Object detection.** A YOLO26 model detects objects in the user's rendered view of the virtual environment.
 2. **Head direction.** The system works out which detected object the user is looking at.
 3. **Conversational AI.** The user asks a spoken question and the answer is generated in the context of that object.
+
+Because the environment is built in Unity, the identity and position of every object are known to the engine. This ground truth is used to measure how accurately the detection model performs.
 
 ## Planned features
 
 | Feature | Requirement | Priority |
 |---|---|---|
-| Real-time object detection through the passthrough camera | FR1 | High |
+| Real-time object detection in the virtual environment | FR1 | High |
 | Bounding box and class label for each detected object | FR8, FR9 | High |
 | Highlighting of the object the user is looking at | FR2 | High |
 | Speech-to-text for spoken questions | FR3 | High |
@@ -31,8 +33,8 @@ Finding information about an unfamiliar object usually means stopping the task, 
 
 ```mermaid
 flowchart TD
-    A[Passthrough camera] --> B[YOLO object detection]
-    B --> C[Map 2D boxes to 3D positions]
+    A[Virtual environment in Unity] --> B[User's rendered view]
+    B --> C[YOLO26 object detection]
     C --> D[Select object in focus from head direction]
     E[User's spoken question] --> F[Speech-to-text]
     D --> G[LLM: question and object context]
@@ -47,9 +49,9 @@ flowchart TD
 |---|---|
 | Headset | Meta Quest |
 | Engine | Unity (version to be confirmed) |
-| XR framework | Meta XR SDK, Passthrough Camera API |
+| XR framework | Meta XR SDK |
 | On-device inference | Unity Inference Engine |
-| Object detection | YOLO, pre-trained on COCO |
+| Object detection | YOLO26 |
 | Speech-to-text | To be decided |
 | Conversational AI | To be decided |
 | Text-to-speech | To be decided |
@@ -62,14 +64,14 @@ Planned layout. Folders will be added as they are needed.
 ```
 Assets/
   Scripts/
-    Detection/      Object detection and 2D to 3D mapping
+    Detection/      Object detection on the rendered view
     Gaze/           Head direction and target selection
     Voice/          Speech-to-text and text-to-speech
     Conversation/   LLM requests and prompt building
     UI/             Highlighting and answer panel
     Logging/        Latency and accuracy measurements
-  Scenes/
-  Models/           YOLO model file
+  Scenes/           Virtual environment
+  Models/           YOLO26 model file
 docs/               Requirements, backlog and meeting notes
 ```
 
@@ -91,19 +93,28 @@ Keys for external services are kept in a local file that is listed in `.gitignor
 
 ## Team
 
-| Name | Role |
-|---|---|
-| Soully | To be assigned |
-| Clinton | To be assigned |
-| Isik | To be assigned |
-| Vedat  | To be assigned |
+| Name | Development responsibility | Design Report section |
+|---|---|---|
+| Soully Traore | Setting up the virtual world | Background Research and Use Case |
+| Isik Tozan | Setting up the virtual world | Implementation Pathway |
+| Clinton | Gathering datasets | Task Outline |
+| Vedat Yildirim | Gathering datasets | Technology and Tools |
+
+All members contribute to coding during the sprints.
+
+## Future work
+
+The detection pipeline works on images, so it could later be extended to mixed reality by using the Meta Quest passthrough camera to detect real-world objects.
 
 ## Use of AI tools
 
 In line with the module's AI policy, any AI-assisted code in this repository is labelled in the source file with a comment stating which tool was used and for what purpose. A summary is kept here.
 
+| File | Tool | Purpose |
+|---|---|---|
+| README.md | Claude | Initial draft, reviewed and edited by the team |
+
 ## References
 
-- Meta Passthrough Camera API: https://developers.meta.com/horizon/documentation/unity/unity-pca-documentation/
-- Meta Passthrough Camera API samples: https://github.com/oculus-samples/Unity-PassthroughCameraApiSamples
-- COCO dataset: https://cocodataset.org/
+- Ultralytics YOLO documentation: https://docs.ultralytics.com/
+- Meta XR SDK for Unity: https://developers.meta.com/horizon/documentation/unity/
