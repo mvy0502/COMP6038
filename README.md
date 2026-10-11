@@ -14,8 +14,6 @@ In a virtual environment, users can see objects but often have no quick way to f
 2. **Head direction.** The system works out which detected object the user is looking at.
 3. **Conversational AI.** The user asks a spoken question and the answer is generated in the context of that object.
 
-Because the environment is built in Unity, the identity and position of every object are known to the engine. This ground truth is used to measure how accurately the detection model performs.
-
 ## Planned features
 
 | Feature | Requirement | Priority |
@@ -33,7 +31,7 @@ Because the environment is built in Unity, the identity and position of every ob
 
 ```mermaid
 flowchart TD
-    A[Virtual environment in Unity] --> B[User's rendered view]
+    A[Virtual environment] --> B[User's rendered view]
     B --> C[YOLO26 object detection]
     C --> D[Select object in focus from head direction]
     E[User's spoken question] --> F[Speech-to-text]
@@ -43,19 +41,32 @@ flowchart TD
     G --> I[Text-to-speech]
 ```
 
+## Object classes
+
+Environment type: office.
+
+| Class ID | Class | Class ID | Class |
+|---|---|---|---|
+| 1 | Laptop | 7 | Printer |
+| 2 | Desk | 8 | Cups |
+| 3 | Desktop Computer | 9 | Coffee machine |
+| 4 | Chair | 10 | Keyboard |
+| 5 | Monitor | 11 | Mouse |
+| 6 | Books | | |
+
+Datasets for these classes are being gathered.
+
 ## Technology
 
 | Component | Tool |
 |---|---|
 | Headset | Meta Quest |
-| Engine | Unity (version to be confirmed) |
-| XR framework | Meta XR SDK |
-| On-device inference | Unity Inference Engine |
-| Object detection | YOLO26 |
+| Engine | Unity (to be confirmed) |
+| Object detection (benchmark algorithm) | YOLO26 |
+| Object detection (testing algorithm) | RT-DETR-L |
 | Speech-to-text | To be decided |
 | Conversational AI | To be decided |
 | Text-to-speech | To be decided |
-| Language | C# |
 
 ## Repository structure
 
@@ -64,26 +75,19 @@ Planned layout. Folders will be added as they are needed.
 ```
 Assets/
   Scripts/
-    Detection/      Object detection on the rendered view
+    Detection/      Object detection
     Gaze/           Head direction and target selection
     Voice/          Speech-to-text and text-to-speech
-    Conversation/   LLM requests and prompt building
+    Conversation/   LLM requests
     UI/             Highlighting and answer panel
     Logging/        Latency and accuracy measurements
   Scenes/           Virtual environment
-  Models/           YOLO26 model file
 docs/               Requirements, backlog and meeting notes
 ```
 
 ## Getting started
 
-Setup instructions will be added once the Unity project has been created.
-
-Expected prerequisites:
-
-- Unity Hub and the Unity version used by the team
-- Android Build Support module for Unity
-- A Meta Quest headset in developer mode
+Setup instructions will be added once the project has been created.
 
 ## API keys
 
@@ -100,11 +104,11 @@ Keys for external services are kept in a local file that is listed in `.gitignor
 | Clinton | Gathering datasets | Task Outline |
 | Vedat Yildirim | Gathering datasets | Technology and Tools |
 
-All members contribute to coding during the sprints.
+All members contribute to coding and programming during the sprints.
 
 ## Future work
 
-The detection pipeline works on images, so it could later be extended to mixed reality by using the Meta Quest passthrough camera to detect real-world objects.
+Mixed reality is recorded as possible future work: the system could later detect real-world objects through the headset's passthrough camera.
 
 ## Use of AI tools
 
@@ -112,9 +116,9 @@ In line with the module's AI policy, any AI-assisted code in this repository is 
 
 | File | Tool | Purpose |
 |---|---|---|
-| README.md | Claude | Initial draft, reviewed and edited by the team |
 
-## References
+## References and tool links
 
-- Ultralytics YOLO documentation: https://docs.ultralytics.com/
-- Meta XR SDK for Unity: https://developers.meta.com/horizon/documentation/unity/
+- https://arxiv.org/html/2508.13101v1
+- Ultralytics YOLO26: https://docs.ultralytics.com/models/yolo26/
+- Ultralytics RT-DETR: https://docs.ultralytics.com/models/rtdetr/
